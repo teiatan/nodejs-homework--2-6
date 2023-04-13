@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const contacts = require("../models/contacts/contacts");
 
-const {HttpError} = require("../utils/index")
+const {HttpError, ControllerWrapper} = require("../utils/index")
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
@@ -10,44 +10,30 @@ const addSchema = Joi.object({
     phone: Joi.string().required()
 });
 
-const listContacts = async (req, res, next) => {
-    try {
+const listContacts = async (req, res) => {
       const result = await contacts.listContacts();
-      res.json(result);
-    } catch(error) {
-      next(error)
-    }
-    
+      res.json(result);    
 };
 
 const getContactById = async (req, res, next) => {
-  try {
     const {contactId} = req.params;
     const result = await contacts.getContactById(contactId);
     if(!result) {
       throw HttpError(404, "Not found. Contact with such id doesn't exist");
     }
     res.json(result);
-  } catch(error) {
-    next(error)
-  }
 };
 
-const removeContact = async (req, res, next) => {
-    try {
+const removeContact = async (req, res) => {
       const {contactId} = req.params;
       const result = await contacts.removeContact(contactId);
       if(!result) {
         throw HttpError(404, "Not found. Contact with such id doesn't exist");
       };
       res.json({"message": "contact deleted"});
-    } catch (error) {
-      next(error)
-    }
 };
 
-const addContact = async (req, res, next) => {
-    try {
+const addContact = async (req, res) => {
     const {error} = addSchema.validate(req.body);
     if(error) {
       const missingField = error.message.split(' ')[0];
@@ -56,13 +42,9 @@ const addContact = async (req, res, next) => {
     };
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
-    } catch(error) {
-      next(error)
-    }
 };
 
-const updateContact = async (req, res, next) => {
-    try {
+const updateContact = async (req, res) => {
       const {error} = addSchema.validate(req.body);
       if(error) {
         throw HttpError(400, `"missing fields" ${error.message}`);
@@ -73,15 +55,12 @@ const updateContact = async (req, res, next) => {
         throw HttpError(404, "Not found. Contact with such id doesn't exist");
       };
       res.json(result);
-    } catch(error) {
-      next(error)
-    }
 };
 
 module.exports = {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact
+    listContacts: ControllerWrapper(listContacts),
+    getContactById: ControllerWrapper(getContactById),
+    removeContact: ControllerWrapper(removeContact),
+    addContact: ControllerWrapper(addContact),
+    updateContact: ControllerWrapper(updateContact)
 };
