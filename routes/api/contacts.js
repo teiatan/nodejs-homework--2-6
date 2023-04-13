@@ -1,21 +1,29 @@
 const express = require('express');
 
+const Joi = require("joi");
+
 const { listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact } = require("../../models/contacts");
 
+const {HttpError} = require("../../utils/index")
+
 const router = express.Router();
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required()
+})
 
 router.get('/', async (req, res, next) => {
   try {
     const result = await listContacts();
     res.json(result);
   } catch(error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error)
   }
   
 });
@@ -25,48 +33,54 @@ router.get('/:contactId', async (req, res, next) => {
     const {contactId} = req.params;
     const result = await getContactById(contactId);
     if(!result) {
-      return res.status(404).json({
-        message: "Contact doesn't exist"
-      })
+      throw HttpError(404, "Not found. Contact with such id doesn't exist");
     }
     res.json(result);
   } catch(error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error)
   }
 });
 
 router.post('/', async (req, res, next) => {
   try {
-  const result = await addContact();
-  res.json(result);
+  const {error} = addSchema.validate(req.body);
+  if(error) {
+    throw HttpError(400, error.message);
+  };
+  const result = await addContact(req.body);
+  res.status(201).json(result);
   } catch(error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error)
   }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-  const result = await removeContact();
-  res.json(result);
-  } catch(error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    const {contactId} = req.params;
+    const result = await removeContact(contactId);
+    if(!result) {
+      throw HttpError(404, "Not found. Contact with such id doesn't exist");
+    };
+    res.json(result);
+  } catch (error) {
+    next(error)
   }
 });
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const result = await updateContact();
+    const {error} = addSchema.validate(req.body);
+    if(error) {
+      throw HttpError(400, error.message);
+    };
+    const {contactId} = req.params;
+    const result = await updateContact(contactId, req.body);
+    if(!result) {
+      throw HttpError(404, "Not found. Contact with such id doesn't exist");
+    };
     res.json(result);
   } catch(error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error)
   }
 });
 
