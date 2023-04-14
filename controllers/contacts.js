@@ -39,7 +39,7 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-const updateFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
   const {contactId} = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
   if(!result) {
@@ -54,5 +54,5 @@ module.exports = {
   removeContact: ControllerWrapper(removeContact),
   addContact: ControllerWrapper(addContact),
   updateContact: ControllerWrapper(updateContact),
-  updateFavorite: ControllerWrapper(updateFavorite)
+  updateStatusContact: ControllerWrapper(updateStatusContact)
 };

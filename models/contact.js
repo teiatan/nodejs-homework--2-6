@@ -8,15 +8,15 @@ const dateRegExp = /(0?[1-9]|[12][0-9]|3[01])[- _](January|February|March|Aprel|
 const contactSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Set name for contact'],
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Set email for contact'],
     },
     phone: {
         type: String,
-        required: true,
+        required: [true, 'Set phone for contact'],
     },
     favorite: {
         type: Boolean,
