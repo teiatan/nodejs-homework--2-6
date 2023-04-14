@@ -1,12 +1,14 @@
-const contacts = require("../models/contacts/contacts");
-const {HttpError, ControllerWrapper} = require("../utils/index");
+// const contacts = require("../models/contacts/contacts");
+const Contact = require("../models/contacts/contact")
+
+const {/* HttpError, */ ControllerWrapper} = require("../utils/index");
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);    
 };
 
-const getContactById = async (req, res,) => {
+/* const getContactById = async (req, res,) => {
   const {contactId} = req.params;
   const result = await contacts.getContactById(contactId);
   if(!result) {
@@ -36,12 +38,12 @@ const updateContact = async (req, res) => {
     throw HttpError(404, "Not found. Contact with such id doesn't exist");
   };
   res.json(result);
-};
+}; */
 
 module.exports = {
   listContacts: ControllerWrapper(listContacts),
-  getContactById: ControllerWrapper(getContactById),
+  /* getContactById: ControllerWrapper(getContactById),
   removeContact: ControllerWrapper(removeContact),
   addContact: ControllerWrapper(addContact),
-  updateContact: ControllerWrapper(updateContact)
+  updateContact: ControllerWrapper(updateContact) */
 };

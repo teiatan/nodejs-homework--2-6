@@ -10,9 +10,9 @@ const {validateBody} = require("../../middlewares");
 const router = express.Router();
 
 router.get('/', listContacts);
-router.get('/:contactId', getContactById);
+/* router.get('/:contactId', getContactById);
 router.post('/', validateBody(contactsSchema), addContact);
 router.delete('/:contactId', removeContact);
-router.put('/:contactId', validateBody(contactsSchema), updateContact);
+router.put('/:contactId', validateBody(contactsSchema), updateContact); */
 
 module.exports = router;
