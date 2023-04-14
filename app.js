@@ -1,12 +1,3 @@
-const mongoose = require("mongoose");
-
-const DB_HOST = "mongodb+srv://teiatan:studyallthetime@cluster0.mrmsfwp.mongodb.net/phonebook?retryWrites=true&w=majority"
-
-mongoose.connect(DB_HOST)
-  .then(()=>console.log('coonected to database'))
-  .catch(error => error.message)
-
-
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
