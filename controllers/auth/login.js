@@ -1,7 +1,7 @@
-const {User} = require("../../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const {SECRET_KEY} = process.env;
+const {User} = require("../../models/user");
 const {ControllerWrapper, HttpError} = require("../../utils/index");
 
 const login = async (req, res) => {
