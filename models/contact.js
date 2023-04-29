@@ -45,6 +45,9 @@ const contactsBasicSchema = Joi.object({
     dateOfBirth: Joi.string().pattern(dateRegExp),
     relationship: Joi.string().valid(...relationships),
 
+} , {
+    versionKey: false,
+    timestamps: true,
 });
 
 const favoriteschema = Joi.object({
