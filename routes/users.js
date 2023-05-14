@@ -1,7 +1,7 @@
 const express = require("express");
-const {validateBody} = require("../../middlewares");
-const {schemas} = require("../../models/user");
-const {register, login, logout, getUsersData} = require("../../controllers/users");
+const {validateBody} = require("../middlewares");
+const {schemas} = require("../models/user");
+const {register, login, logout, getUsersData} = require("../controllers/users");
 
 const router = express.Router();
 

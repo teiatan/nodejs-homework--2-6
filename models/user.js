@@ -3,16 +3,19 @@ const { handleMongooseError } = require("../utils");
 const Joi = require("joi");
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d].{8,30}$/;
+// Min 1 uppercase letter. Min 1 lowercase letter. Min 1 special character.
+// Min 1 number. Min 8 characters. Max 30 characters.
+
 
 const userSchema = new Schema({
     name: {
-        type: String,
-        required: true
+        type: String
     },
     password: {
         type: String,
         minlength: 8,
-        required: [true, 'Password is required'],
+        required: [true, 'Password is required']
     },
     email: {
         type: String,
@@ -34,8 +37,13 @@ const userSchema = new Schema({
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-    name: Joi.string().required(),
-    password: Joi.string().min(8).required(),
+    name: Joi.string(),
+    password: Joi.string().min(8).max(30).pattern(passwordRegex).required()
+        .messages({
+            "string.pattern.base":"Password should contain at least one uppercase letter, one lowercase letter, one number and one special character",
+            "string.min":"Password shoud be at least 8 characters",
+            "string.max":"Password shoul be less than 30 characters"
+        }),
     email: Joi.string().pattern(emailRegex).required(),
 }, {
     versionKey: false,
