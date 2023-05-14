@@ -4,9 +4,7 @@ const Joi = require("joi");
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d].{8,30}$/;
-// Min 1 uppercase letter. Min 1 lowercase letter. Min 1 special character.
-// Min 1 number. Min 8 characters. Max 30 characters.
-
+const subscriptionTypes = ["starter", "pro", "business"];
 
 const userSchema = new Schema({
     name: {
@@ -25,7 +23,7 @@ const userSchema = new Schema({
     },
     subscription: {
         type: String,
-        enum: ["starter", "pro", "business"],
+        enum: subscriptionTypes,
         default: "starter"
     },
     token: {
@@ -60,11 +58,15 @@ const loginSchema = Joi.object({
     timestamps: true,
 });
 
+const subscriptionSchema = Joi.object({
+    subscription: Joi.string().valid(...subscriptionTypes).required()
+});
 
 const User = model("user", userSchema);
 const schemas = {
     registerSchema,
-    loginSchema
+    loginSchema,
+    subscriptionSchema
 };
 
 module.exports = {
