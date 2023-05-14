@@ -52,7 +52,9 @@ const registerSchema = Joi.object({
 
 const loginSchema = Joi.object({
     password: Joi.string().min(8).required(),
-    email: Joi.string().pattern(emailRegex).required(),
+    email: Joi.string().pattern(emailRegex).required().messages({
+        "string.pattern.base":"You have misprint in your email"
+    }),
 }, {
     versionKey: false,
     timestamps: true,

@@ -24,7 +24,7 @@ const login = async (req, res) => {
 
     const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
 
-    res.status(200).json({token: token, user: user});
+    res.status(200).json({token: token, user: {email: user.email, password: user.subscription}});
 };
 
 module.exports = ControllerWrapper(login);
