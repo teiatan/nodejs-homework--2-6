@@ -2,7 +2,7 @@ const {Schema, model} = require("mongoose");
 const { handleMongooseError } = require("../utils");
 const Joi = require("joi");
 
-const relationships = ["famile", "work", "friend", "service"];
+const relationships = ["family", "work", "friend", "service"];
 const dateRegExp = /(0?[1-9]|[12][0-9]|3[01])[- _](January|February|March|Aprel|May|June|July|August|September|October|November|December)[- _]((19|20)\d\d)/;
 
 const contactSchema = new Schema({
@@ -29,7 +29,12 @@ const contactSchema = new Schema({
     relationship: {
         type: String,
         enum: relationships,
-    }
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+      }
 }, {
     versionKey: false,
     timestamps: true,
