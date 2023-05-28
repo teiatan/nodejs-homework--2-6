@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const fs = require("fs/promises");
 const path = require("path");
 const gravatar = require("gravatar");
+const {nanoid} = require("nanoid");
 
 
 const {ControllerWrapper, HttpError} = require("../../utils/index");
@@ -22,9 +23,10 @@ const register = async (req, res) => {
     let avatarURL;
     if(req.file){
         const { path: tempUpload, originalname} = req.file;
-        const resultUpload = path.join(avatarDir, originalname);
+        const avatarName = `${nanoid()}${originalname}`;
+        const resultUpload = path.join(avatarDir, avatarName);
         await fs.rename(tempUpload, resultUpload);
-        avatarURL = path.join("avatars", originalname);
+        avatarURL = path.join("avatars", avatarName);
     } else {
         avatarURL = gravatar.url(email, { s: "100", r: "x" }, false);
     };
