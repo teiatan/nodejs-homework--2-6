@@ -6,7 +6,7 @@ const gravatar = require("gravatar");
 const {nanoid} = require("nanoid");
 
 
-const {ControllerWrapper, HttpError, modifyImage} = require("../../utils/index");
+const {ControllerWrapper, HttpError, modifyImage, sendEmail} = require("../../utils/index");
 
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
@@ -32,8 +32,12 @@ const register = async (req, res) => {
     };
 
     const hashPassword = await bcrypt.hash(password, 12);
+    const verificationToken = nanoid();
 
-    const newUser = await User.create({...req.body, password: hashPassword, avatarURL});
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken});
+    
+    await sendEmail(email, verificationToken);
+
     res.status(201).json({email: newUser.email, subscription: newUser.subscription});
 };
 
