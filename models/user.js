@@ -37,13 +37,13 @@ userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
     name: Joi.string(),
+    email: Joi.string().pattern(emailRegex).required(),
     password: Joi.string().min(8).max(30).pattern(passwordRegex).required()
         .messages({
             "string.pattern.base":"Password should contain at least one uppercase letter, one lowercase letter, one number and one special character",
             "string.min":"Password shoud be at least 8 characters",
             "string.max":"Password shoul be less than 30 characters"
         }),
-    email: Joi.string().pattern(emailRegex).required(),
 }, {
     versionKey: false,
     timestamps: true,

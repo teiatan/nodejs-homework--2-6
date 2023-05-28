@@ -5,11 +5,11 @@ const {register, login, logout, getUsersData, updateSubscription} = require("../
 
 const router = express.Router();
 
-router.post('/register', validateBody(schemas.registerSchema), upload.single("avatarURL"), register);
+router.post('/register', upload.single("avatarURL"), validateBody(schemas.registerSchema), register);
 router.post('/login', validateBody(schemas.loginSchema), login);
 router.post('/logout', authenticate, logout);
 router.get('/current', authenticate, getUsersData);
 router.patch('/', authenticate, validateBody(schemas.subscriptionSchema), updateSubscription);
-router.patch('/avatars')
+router.patch('/avatars');               
 
 module.exports = router;
