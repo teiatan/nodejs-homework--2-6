@@ -10,6 +10,6 @@ router.post('/login', validateBody(schemas.loginSchema), login);
 router.post('/logout', authenticate, logout);
 router.get('/current', authenticate, getUsersData);
 router.patch('/', authenticate, validateBody(schemas.subscriptionSchema), updateSubscription);
-router.patch('/avatars', authenticate, updateAvatar);               
+router.patch('/avatars', authenticate, upload.single("avatarURL"), updateAvatar);               
 
 module.exports = router;

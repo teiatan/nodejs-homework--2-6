@@ -5,32 +5,34 @@ const { User } = require("../../models/user");
 const { HttpError, modifyImage } = require("../../utils");
 
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
-const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
+// const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
 
 const updateAvatar = async (req, res) => {
+  console.log(req.file);
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+  const avatarName = `${_id}_${originalname}`;
 
-  const fileExtension = originalname.substring(
+  /* const fileExtension = originalname.substring(
     originalname.lastIndexOf(".") + 1
   );
 
   if (!avatarExtensions.includes(fileExtension.toLowerCase())) {
     throw HttpError(
       400,
-      `${originalname} includes invalid file extension! Must be: ${avatarExtensions.join(
+      `${originalname} includes an invalid file extension! Must be: ${avatarExtensions.join(
         ", or "
       )}`
     );
-  }
+  } */
 
-  const resultUpload = path.join(avatarDir, originalname);
+  const resultUpload = path.join(avatarDir, avatarName);
 
-  await modifyImage(tempUpload);
+  // await modifyImage(tempUpload);
 
   await fs.rename(tempUpload, resultUpload);
 
-  const avatarURL = path.join("avatars", originalname);
+  const avatarURL = path.join("avatars", avatarName);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({ avatarURL });
