@@ -6,7 +6,7 @@ const gravatar = require("gravatar");
 const {nanoid} = require("nanoid");
 
 
-const {ControllerWrapper, HttpError} = require("../../utils/index");
+const {ControllerWrapper, HttpError, modifyImage} = require("../../utils/index");
 
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
@@ -19,16 +19,16 @@ const register = async (req, res) => {
         throw HttpError(409, `User with email ${email} already exists`);
     };
 
-    // const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
     let avatarURL;
     if(req.file){
         const { path: tempUpload, originalname} = req.file;
-        const avatarName = `${nanoid()}${originalname}`;
-        const resultUpload = path.join(avatarDir, avatarName);
+        const fileName = `${nanoid()}${originalname}`;
+        const resultUpload = path.join(avatarDir, fileName);
+        await modifyImage(tempUpload);
         await fs.rename(tempUpload, resultUpload);
-        avatarURL = path.join("avatars", avatarName);
+        avatarURL = path.join("avatars", fileName);
     } else {
-        avatarURL = gravatar.url(email, { s: "100", r: "x" }, false);
+        avatarURL = gravatar.url(email);
     };
 
     const hashPassword = await bcrypt.hash(password, 12);
