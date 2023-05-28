@@ -10,7 +10,6 @@ const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  const avatarName = `${_id}_${originalname}`;
 
   const fileExtension = originalname.substring(
     originalname.lastIndexOf(".") + 1
@@ -25,13 +24,13 @@ const updateAvatar = async (req, res) => {
     );
   }
 
-  const resultUpload = path.join(avatarDir, avatarName);
+  const resultUpload = path.join(avatarDir, originalname);
 
   await modifyImage(tempUpload);
 
   await fs.rename(tempUpload, resultUpload);
 
-  const avatarURL = path.join("avatars", avatarName);
+  const avatarURL = path.join("avatars", originalname);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({ avatarURL });
