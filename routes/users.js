@@ -6,6 +6,7 @@ const {register, login, logout, getUsersData, updateSubscription, updateAvatar} 
 const router = express.Router();
 
 router.post('/register', upload.single("avatarURL"), validateBody(schemas.registerSchema), register);
+router.get('/verify/:verificationToken');
 router.post('/login', validateBody(schemas.loginSchema), login);
 router.post('/logout', authenticate, logout);
 router.get('/current', authenticate, getUsersData);

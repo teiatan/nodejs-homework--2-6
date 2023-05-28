@@ -30,18 +30,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-
-const sgMail = require("@sendgrid/mail");
-const {SENDGRID_API_KEY} = process.env;
-sgMail.setApiKey(SENDGRID_API_KEY);
-const email = {
-  to: "protas.tb@gmail.com",
-  from: "protas.tb@gmail.com",
-  subject: "Test email",
-  html: "<h1>Hello world</h1>"
-};
-
-sgMail.send(email)
-  .then(()=>console.log("successfully ssend"))
-  .catch(error => console.log(error.message))
-  
