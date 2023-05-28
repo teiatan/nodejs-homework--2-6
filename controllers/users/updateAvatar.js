@@ -8,7 +8,6 @@ const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
 
 const updateAvatar = async (req, res) => {
-  console.log(req.file);
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const avatarName = `${_id}_${originalname}`;
@@ -20,7 +19,7 @@ const updateAvatar = async (req, res) => {
   if (!avatarExtensions.includes(fileExtension.toLowerCase())) {
     throw HttpError(
       400,
-      `${originalname} includes an invalid file extension! Must be: ${avatarExtensions.join(
+      `${originalname} includes invalid file extension! Must be: ${avatarExtensions.join(
         ", or "
       )}`
     );

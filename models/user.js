@@ -1,10 +1,12 @@
 const {Schema, model} = require("mongoose");
 const { handleMongooseError } = require("../utils");
 const Joi = require("joi");
+const gravatar = require("gravatar");
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d].{8,30}$/;
 const subscriptionTypes = ["starter", "pro", "business"];
+// const defaultAvatarURL = gravatar.url(email, { s: "100", r: "x" }, false);
 
 const userSchema = new Schema({
     name: {
@@ -30,7 +32,10 @@ const userSchema = new Schema({
         type: String,
         default: null,
     },
-    avatarURL: String,
+    avatarURL: {
+        type: String,
+        // default: defaultAvatarURL,
+    },
 }, {versionKey: false, timestamps: true});
 
 userSchema.post("save", handleMongooseError);
