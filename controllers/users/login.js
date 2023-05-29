@@ -12,6 +12,10 @@ const login = async (req, res) => {
         throw HttpError(401, `No user with such email`);
     };
 
+    if (!user.verify) {
+        throw HttpError(401, "Email is not verified yet");
+    };
+
     const comparePassword = await bcrypt.compare(password, user.password);
 
     if(!comparePassword) {
